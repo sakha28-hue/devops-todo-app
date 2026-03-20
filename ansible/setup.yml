@@ -1,0 +1,32 @@
+---
+- name: Setup Todo App Server
+  hosts: todo_servers
+  become: yes
+
+  tasks:
+    - name: Update packages
+      yum:
+        name: "*"
+        state: latest
+
+    - name: Install Docker
+      yum:
+        name: docker
+        state: present
+
+    - name: Start Docker service
+      service:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Add ec2-user to docker group
+      user:
+        name: ec2-user
+        groups: docker
+        append: yes
+
+    - name: Install git
+      yum:
+        name: git
+        state: present
